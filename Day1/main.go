@@ -15,35 +15,30 @@ func main() {
 		fmt.Errorf("cannot get current directory: %w", err)
 	}
 
-	fmt.Println(dir)
-
-	readCalories(dir)
-
+	calories, _ := readCalories(dir)
+	fmt.Println("Sum:", calories)
 }
 
-func readCalories(dir string) {
+func readCalories(dir string) (int, error) {
 	fname := filepath.Join(dir, "calories.txt")
 
 	file, err := os.Open(fname)
 	if err != nil {
-		fmt.Errorf("cannot open calories file: %w", err)
+		return 0, fmt.Errorf("cannot open calories file: %w", err)
 	}
 	defer file.Close()
 
 	buf, err := io.ReadAll(file)
 	if err != nil {
-		fmt.Errorf("cannot read calories: %w", err)
+		return 0, fmt.Errorf("cannot read calories: %w", err)
 	}
 
 	calories := string(buf)
-
-	fmt.Println(calories)
 
 	caloriesListString := strings.Split(calories, "\n")
 	var tmp []string
 	for _, calorie := range caloriesListString {
 		tmp = append(tmp, calorie)
-
 	}
 
 	caloriesListInt := make([]int, len(caloriesListString))
@@ -51,8 +46,6 @@ func readCalories(dir string) {
 	for i, s := range caloriesListString {
 		caloriesListInt[i], _ = strconv.Atoi(s)
 	}
-
-	fmt.Println(caloriesListInt)
 
 	sum := 0
 	highestSum := 0
@@ -79,10 +72,6 @@ func readCalories(dir string) {
 
 	}
 
-	fmt.Println(highestSum)
-	fmt.Println(secondHighest)
-	fmt.Println(thirdHighest)
-
-	fmt.Println("Summe :", highestSum+secondHighest+thirdHighest)
-
+	sum = highestSum + secondHighest + thirdHighest
+	return sum, nil
 }
