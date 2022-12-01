@@ -55,7 +55,9 @@ func readCalories(dir string) {
 	fmt.Println(caloriesListInt)
 
 	sum := 0
-	sumX := 0
+	highestSum := 0
+	secondHighest := 0
+	thirdHighest := 0
 
 	for _, v := range caloriesListInt {
 		if v != 0 {
@@ -65,14 +67,22 @@ func readCalories(dir string) {
 			sum = 0
 
 		}
-		if sum > sumX {
-			sumX = sum
-		}
+		if sum > highestSum {
+			highestSum = sum
 
-		fmt.Println(sum)
+		} else if sum > secondHighest && sum < highestSum {
+			secondHighest = highestSum
+
+		} else if sum > thirdHighest && sum < highestSum {
+			thirdHighest = sum
+		}
 
 	}
 
-	fmt.Println("Höchste Summe :", sumX)
+	fmt.Println(highestSum)
+	fmt.Println(secondHighest)
+	fmt.Println(thirdHighest)
+
+	fmt.Println("Summe :", highestSum+secondHighest+thirdHighest)
 
 }
