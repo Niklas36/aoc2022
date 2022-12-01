@@ -1,41 +1,25 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
-	"io"
-	"os"
-	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 )
 
-func main() {
-	dir, err := os.Getwd()
-	if err != nil {
-		fmt.Errorf("cannot get current directory: %w", err)
-	}
+//go:embed calories.txt
+var input string
 
-	calories, _ := readCalories(dir)
-	fmt.Println("Sum:", calories)
+func main() {
+	err := readCalories()
+	if err != nil {
+		fmt.Errorf("cannot read calories: %w", err)
+	}
 }
 
-func readCalories(dir string) (int, error) {
-	fname := filepath.Join(dir, "calories.txt")
-
-	file, err := os.Open(fname)
-	if err != nil {
-		return 0, fmt.Errorf("cannot open calories file: %w", err)
-	}
-	defer file.Close()
-
-	buf, err := io.ReadAll(file)
-	if err != nil {
-		return 0, fmt.Errorf("cannot read calories: %w", err)
-	}
-
-	calories := string(buf)
-
-	caloriesListString := strings.Split(calories, "\n")
+func readCalories() error {
+	caloriesListString := strings.Split(input, "\n")
 	var tmp []string
 	for _, calorie := range caloriesListString {
 		tmp = append(tmp, calorie)
@@ -48,30 +32,23 @@ func readCalories(dir string) (int, error) {
 	}
 
 	sum := 0
-	highestSum := 0
-	secondHighest := 0
-	thirdHighest := 0
-
+	var caloriesSums []int
 	for _, v := range caloriesListInt {
 		if v != 0 {
 			sum += v
-
+			caloriesSums = append(caloriesSums, sum)
 		} else {
 			sum = 0
-
 		}
-		if sum > highestSum {
-			highestSum = sum
-
-		} else if sum > secondHighest && sum < highestSum {
-			secondHighest = highestSum
-
-		} else if sum > thirdHighest && sum < highestSum {
-			thirdHighest = sum
-		}
-
 	}
+	sort.Slice(caloriesSums, func(i, j int) bool {
+		return caloriesSums[i] < caloriesSums[j]
+	})
 
-	sum = highestSum + secondHighest + thirdHighest
-	return sum, nil
+	highestSum := caloriesSums[len(caloriesSums)-1]
+	fmt.Println("Highest calories: ", highestSum)
+
+	sumTop3 := caloriesSums[len(caloriesSums)-1] + caloriesSums[len(caloriesSums)-2] + caloriesSums[len(caloriesSums)-3]
+	fmt.Println("Sum Top 3 calories: ", sumTop3)
+	return nil
 }
