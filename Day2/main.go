@@ -16,34 +16,31 @@ func main() {
 	for i, v := range inputSlice {
 		switch v {
 
-		case "Y": // Draw
-			p = p + 2
-			if inputSlice[i-2] == "A" {
-				p = p + 6
-			} else if inputSlice[i-2] == "B" {
+		case "A": // Rock
+			if inputSlice[i+2] == "Y" { // Draw, Rock, 1
+				p = p + 3 + 1
+			} else if inputSlice[i+2] == "X" { // Loose, Scissors, 3
 				p = p + 3
-			} else {
-				p = p + 0
+			} else { // Win, Paper, 2
+				p = p + 6 + 2
 			}
 
-		case "X": // Loose
-			p = p + 1
-			if inputSlice[i-2] == "A" {
-				p = p + 3
-			} else if inputSlice[i-2] == "B" {
-				p = p + 0
-			} else {
-				p = p + 6
+		case "B": // Paper
+			if inputSlice[i+2] == "Y" { // Draw, Paper, 2
+				p = p + 3 + 2
+			} else if inputSlice[i+2] == "X" { // Loose, Rock, 1
+				p = p + 1
+			} else { // Win, Scissors, 3
+				p = p + 6 + 3
 			}
 
-		case "Z": // Win
-			p = p + 3
-			if inputSlice[i-2] == "A" {
-				p = p + 0
-			} else if inputSlice[i-2] == "B" {
-				p = p + 6
-			} else {
-				p = p + 3
+		case "C": // Scissors
+			if inputSlice[i+2] == "Y" { // Draw, Scissors, 3
+				p = p + 3 + 3
+			} else if inputSlice[i+2] == "X" { // Loose, Paper, 2
+				p = p + 2
+			} else { // Win, Rock, 1
+				p = p + 6 + 1
 			}
 		}
 	}
