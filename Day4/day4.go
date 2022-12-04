@@ -34,10 +34,14 @@ func main() {
 	}
 
 	for x := 0; x < len(inputSplit6)/4; x++ {
-
-		if nums[counter] <= nums[counter+2] && nums[counter+1] >= nums[counter+3] || nums[counter] >= nums[counter+2] && nums[counter+1] <= nums[counter+3] {
+		if nums[counter] < nums[counter+2] && nums[counter+1] >= nums[counter+2] {
+			pairCounter++
+		} else if nums[counter] == nums[counter+2] {
+			pairCounter++
+		} else if nums[counter+2] < nums[counter] && nums[counter+3] >= nums[counter] {
 			pairCounter++
 		}
+
 		counter += 4
 
 	}
